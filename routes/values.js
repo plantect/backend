@@ -42,10 +42,8 @@ val.post("/api/values",async (req, res) => {
             P: body.P,
             K: body.K,
             pH: body.pH,
-            temperature: 25,
-            humidity: 85,
-            // temperature: body.temperature,
-            // humidity: body.humidity,
+            temperature: body.temperature,
+            humidity: body.humidity,
         };
         valuesArr.push(obj);
         fs.writeFile(DB_PATH, JSON.stringify(valuesArr), (err) => {
