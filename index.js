@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(val);
 app.use(viewresult);
-const DB = "mongodb+srv://plantect:plantect@cluster0.mfnsagy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const DB = "mongodb+srv://plantect:plantect@cluster0.9dllm1w.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
     .connect(DB)
