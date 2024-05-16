@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const DB_PATH = path.resolve("db.json");
 
 // Ensure the JSON file exists, create it if it doesn't
-if (!fs.existsSync(DB_PATH)) {
+if (!fs.existsSync(DB_PATH)){
     try {
         fs.writeFileSync(DB_PATH, '[]');
         console.log("db.json created successfully");
@@ -33,10 +33,7 @@ val.get("/api/values", async (req, res) => {
             return res.status(500).json({ message: "Internal Server Error" });
         }
         let values = JSON.parse(jsonString);
-        res.status(200).json({
-            totalValues: values.length,
-            values,
-        });
+        res.status(200).json(values);
     });
 });
 
@@ -68,10 +65,7 @@ val.post("/api/values", async (req, res) => {
                 console.log("Error in updating db:", err);
                 return res.status(500).json({ message: "Internal Server Error" });
             }
-            res.status(200).json({
-                message: "Values saved",
-                value: valuesArr[valuesArr.length - 1],
-            });
+            res.status(200).json(valuesArr);
         });
     });
 });
