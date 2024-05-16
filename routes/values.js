@@ -3,7 +3,7 @@ const val = express.Router();
 const path = require("path");
 const fs = require("fs");
 
-//constants
+// Constants
 const DB_PATH = path.resolve("db.json");
 
 // Ensure the JSON file exists, create it if it doesn't
@@ -16,11 +16,24 @@ if (!fs.existsSync(DB_PATH)) {
     }
 }
 
+// Function to read values from the JSON file
+function readValuesFromFile(callback) {
+    fs.readFile(DB_PATH, "UTF-8", (err, jsonString) => {
+        if (err) {
+            console.error("Error in reading from db:", err);
+            return callback(err);
+        }
+        const values = JSON.parse(jsonString);
+        callback(null, values);
+    });
+}
+
 // Routes
 val.get("/api/values", async (req, res) => {
-    fs.readFile(DB_PATH, "UTF-8", (err, jsonString) => {
-        if (err) return console.log("Error in reading from db");
-        let values = JSON.parse(jsonString);
+    readValuesFromFile((err, values) => {
+        if (err) {
+            return res.status(500).json({ error: "Internal server error" });
+        }
         res.status(200).json({
             totalValues: values.length,
             values,
@@ -29,40 +42,45 @@ val.get("/api/values", async (req, res) => {
 });
 
 val.post("/api/values", async (req, res) => {
-    fs.readFile(DB_PATH, "UTF-8", (err, jsonString) => {
-        if (err) return console.log("Error in reading from db");
+    const body = req.body;
 
-        let body = req.body;
-        if (!Array.isArray(body)) {
-            return res.status(400).json({ error: "Expected an array of objects" });
+    // Check if body is an object
+    if (typeof body !== 'object') {
+        return res.status(400).json({ error: "Request body must be an object" });
+    }
+
+    // Check if required fields are present
+    if (!('crop' in body) || !('N' in body) || !('P' in body) || !('K' in body) || !('pH' in body) || !('temperature' in body) || !('humidity' in body)) {
+        return res.status(400).json({ error: "Request body is missing required fields" });
+    }
+
+    // Combine new data with existing data
+    readValuesFromFile((err, existingValues) => {
+        if (err) {
+            return res.status(500).json({ error: "Internal server error" });
         }
 
-        let appData = body[0];  // Assuming app data is the first element
-        let sensorData = body[1];  // Assuming sensor data is the second element
-
-        // Check for required fields in sensor data
-        if (sensorData.temperature === undefined || sensorData.humidity === undefined) {
-            return res.status(400).json({ error: "Missing required fields: 'temperature' or 'humidity'" });
-        }
-
-        let obj = {
-            crop: appData.crop,
-            N: appData.N,
-            P: appData.P,
-            K: appData.K,
-            pH: appData.pH,
-            temperature: sensorData.temperature,
-            humidity: sensorData.humidity,
+        const newData = {
+            crop: body.crop,
+            N: body.N,
+            P: body.P,
+            K: body.K,
+            pH: body.pH,
+            temperature: body.temperature,
+            humidity: body.humidity,
         };
 
-        // Overwrite the array with the new object
-        let valuesArr = [obj];
+        const combinedData = [...existingValues, newData];
 
-        fs.writeFile(DB_PATH, JSON.stringify(valuesArr), (err) => {
-            if (err) return console.log("Error in updating db");
+        // Write combined data to JSON file
+        fs.writeFile(DB_PATH, JSON.stringify(combinedData), (err) => {
+            if (err) {
+                console.error("Error in updating db:", err);
+                return res.status(500).json({ error: "Internal server error" });
+            }
             res.status(200).json({
-                message: "Values saved",
-                value: obj,
+                message: "Value saved",
+                value: newData,
             });
         });
     });
