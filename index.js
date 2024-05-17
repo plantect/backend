@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(val);
 app.use(viewresult);
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 const DB = "mongodb+srv://plantect:plantect@cluster0.9dllm1w.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
