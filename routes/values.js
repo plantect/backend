@@ -1,12 +1,12 @@
 const express = require("express");
 const val = express.Router();
-const bodyParser = require("body-parser");
+//const bodyParser = require("body-parser");
 const path = require("path");
 const fs = require("fs");
 
 //constants
 const DB_PATH = path.resolve("db.json");
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
 
 // Ensure the JSON file exists, create it if it doesn't
 if (!fs.existsSync(DB_PATH)){
