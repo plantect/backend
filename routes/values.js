@@ -7,12 +7,21 @@ const fs = require("fs");
 const DB_PATH = path.resolve("db.json");
 
 // Ensure the JSON file exists, create it if it doesn't
-if (!fs.existsSync(DB_PATH)){
+if (!fs.existsSync(DB_PATH)) {
     try {
         fs.writeFileSync(DB_PATH, '[]');
         console.log("db.json created successfully");
     } catch (error) {
         console.error("Error creating db.json:", error);
+    }
+} else {
+    // Validate that the file contains a valid JSON array
+    try {
+        const data = fs.readFileSync(DB_PATH, 'UTF-8');
+        JSON.parse(data);
+    } catch (error) {
+        console.error("Invalid JSON in db.json, reinitializing:", error);
+        fs.writeFileSync(DB_PATH, '[]');
     }
 }
 
@@ -39,7 +48,9 @@ val.get("/api/values", (req, res) => {
             values = JSON.parse(jsonString);
         } catch (parseError) {
             console.error("Error parsing JSON:", parseError);
-            return res.status(500).json({ error: "Error parsing JSON" });
+            // Reinitialize db.json if it's corrupted
+            fs.writeFileSync(DB_PATH, '[]');
+            return res.status(500).json({ error: "Error parsing JSON. Reinitialized db.json." });
         }
         res.status(200).json({
             totalValues: values.length,
@@ -86,9 +97,20 @@ val.post("/api/values", (req, res) => {
             console.error("Error in reading from db:", err);
             return res.status(500).json({ error: "Error in reading from db" });
         }
-        let valuesArr = JSON.parse(jsonString);
+        let valuesArr;
+        try {
+            valuesArr = JSON.parse(jsonString);
+        } catch (parseError) {
+            console.error("Error parsing JSON:", parseError);
+            // Reinitialize db.json if it's corrupted
+            fs.writeFileSync(DB_PATH, '[]');
+            valuesArr = [];
+        }
 
-        valuesArr = []
+        // Validate the request body
+        if (typeof req.body.humidity !== 'number' || typeof req.body.temperature !== 'number') {
+            return res.status(400).json({ error: "Invalid data format" });
+        }
 
         // Create an object with the new values
         let obj = {
