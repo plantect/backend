@@ -4,6 +4,7 @@ const authRouter = require("./routes/auth");
 const val = require('./routes/values');
 const viewresult = require('./routes/viewresult');
 const cors = require('cors');
+const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(val);
 app.use(viewresult);
+app.use(bodyParser.json())
 const DB = "mongodb+srv://plantect:plantect@cluster0.9dllm1w.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose

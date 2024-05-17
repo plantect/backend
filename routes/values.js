@@ -1,12 +1,10 @@
 const express = require("express");
 const val = express.Router();
-//const bodyParser = require("body-parser");
 const path = require("path");
 const fs = require("fs");
 
 //constants
 const DB_PATH = path.resolve("db.json");
-//app.use(bodyParser.json())
 
 // Ensure the JSON file exists, create it if it doesn't
 if (!fs.existsSync(DB_PATH)){
@@ -39,15 +37,16 @@ val.post("/api/values",async (req, res) => {
         valuesArr = []
         
         let obj = {
-            crop: body.crop,
-            N: body.N,
-            P: body.P,
-            K: body.K,
-            pH: body.pH,
+            // crop: body.crop,
+            // N: body.N,
+            // P: body.P,
+            // K: body.K,
+            // pH: body.pH,
             //temperature: 25,
             //humidity: 85,
             temperature: body.temperature,
             humidity: body.humidity,
+            timestamp: new Date().toISOString()
         };
         valuesArr.push(obj);
         fs.writeFile(DB_PATH, JSON.stringify(valuesArr), (err) => {
