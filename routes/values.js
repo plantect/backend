@@ -86,13 +86,9 @@ val.post("/api/values", (req, res) => {
             console.error("Error in reading from db:", err);
             return res.status(500).json({ error: "Error in reading from db" });
         }
-        valuesArr = [];
-        try {
-            valuesArr = JSON.parse(jsonString);
-        } catch (parseError) {
-            console.error("Error parsing JSON:", parseError);
-            return res.status(500).json({ error: "Error parsing JSON" });
-        }
+        let valuesArr = JSON.parse(jsonString);
+
+        valuesArr = []
 
         // Create an object with the new values
         let obj = {
