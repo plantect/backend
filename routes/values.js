@@ -86,7 +86,7 @@ val.post("/api/values", (req, res) => {
             console.error("Error in reading from db:", err);
             return res.status(500).json({ error: "Error in reading from db" });
         }
-        let valuesArr;
+        valuesArr = [];
         try {
             valuesArr = JSON.parse(jsonString);
         } catch (parseError) {
