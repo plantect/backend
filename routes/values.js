@@ -28,7 +28,7 @@ if (!fs.existsSync(DB_PATH)){
 //     });
 // });
 
-app.get("/api/values", (req, res) => {
+val.get("/api/values", (req, res) => {
     fs.readFile(DB_PATH, "UTF-8", (err, jsonString) => {
         if (err) {
             console.error("Error in reading from db:", err);
@@ -80,7 +80,7 @@ app.get("/api/values", (req, res) => {
 //     });
 // });
 
-app.post("/api/values", (req, res) => {
+val.post("/api/values", (req, res) => {
     fs.readFile(DB_PATH, "UTF-8", (err, jsonString) => {
         if (err) {
             console.error("Error in reading from db:", err);
