@@ -1,10 +1,12 @@
 const express = require("express");
 const val = express.Router();
+const bodyParser = require("body-parser");
 const path = require("path");
 const fs = require("fs");
 
 //constants
 const DB_PATH = path.resolve("db.json");
+app.use(bodyParser.json())
 
 // Ensure the JSON file exists, create it if it doesn't
 if (!fs.existsSync(DB_PATH)){
@@ -52,7 +54,8 @@ val.post("/api/values",async (req, res) => {
             if(err) return console.log("Error in updating db");
             res.status(200).json({
                 message: "Values saved",
-                value: valuesArr[valuesArr.length - 1],
+                // value: valuesArr[valuesArr.length - 1]
+                value: obj,
             });
         });
     });
