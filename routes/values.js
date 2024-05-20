@@ -114,11 +114,11 @@ val.post("/api/values", (req, res) => {
 
         // Create an object with the new values
         let obj = {
-            crop: body.crop,
-            N: body.N,
-            P: body.P,
-            K: body.K,
-            pH: body.pH,
+            crop: req.body.crop,
+            N: req.body.N,
+            P: req.body.P,
+            K: req.body.K,
+            pH: req.body.pH,
             humidity: req.body.humidity,
             temperature: req.body.temperature,
         };
