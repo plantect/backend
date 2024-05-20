@@ -68,11 +68,11 @@ val.get("/api/values", (req, res) => {
 //         valuesArr = []
         
 //         let obj = {
-//             // crop: body.crop,
-//             // N: body.N,
-//             // P: body.P,
-//             // K: body.K,
-//             // pH: body.pH,
+            // crop: body.crop,
+            // N: body.N,
+            // P: body.P,
+            // K: body.K,
+            // pH: body.pH,
 //             //temperature: 25,
 //             //humidity: 85,
 //             temperature: body.temperature,
@@ -114,9 +114,13 @@ val.post("/api/values", (req, res) => {
 
         // Create an object with the new values
         let obj = {
+            crop: body.crop,
+            N: body.N,
+            P: body.P,
+            K: body.K,
+            pH: body.pH,
             humidity: req.body.humidity,
             temperature: req.body.temperature,
-            timestamp: new Date().toISOString() // Add a timestamp for tracking
         };
         valuesArr.push(obj); // Add new object to array
 
