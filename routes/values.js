@@ -5,6 +5,7 @@ const fs = require("fs");
 
 //constants
 const DB_PATH = path.resolve("db.json");
+let latestSensorData = { temperature: null, humidity: null };
 
 // Ensure the JSON file exists, create it if it doesn't
 if (!fs.existsSync(DB_PATH)){
