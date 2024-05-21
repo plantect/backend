@@ -49,8 +49,6 @@ val.post("/api/values",async (req, res) => {
             P: body.P,
             K: body.K,
             pH: body.pH,
-            // temperature: 25,
-            // humidity: 85,
             temperature: latestSensorData.temperature,
             humidity: latestSensorData.humidity,
         };
